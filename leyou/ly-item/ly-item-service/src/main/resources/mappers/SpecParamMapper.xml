@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leyou.dao.SpecParamMapper">
+
+    <delete id="deleteSpecParam" parameterType="long" >
+        DELETE  FROM tb_spec_param WHERE id=#{id}
+    </delete>
+    <update id="updateSpecParam" parameterType="com.leyou.pojo.SpecParam" >
+        update tb_spec_param set cid=#{cid},group_id=#{groupId},name=#{name},`numeric`=#{numeric},
+        unit=#{unit},generic=#{generic},searching=#{searching},segments=#{segments}
+        WHERE id=#{id}
+    </update>
+</mapper>

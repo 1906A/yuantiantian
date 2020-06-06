@@ -65,4 +65,11 @@ public class SpecService {
         specParam.setSearching(true);
         return specParamMapper.select(specParam);
     }
+
+    public List<SpecParam> findParamByCidAndGeneric(Long cid) {
+        SpecParam specParam = new SpecParam();
+        specParam.setCid(cid);
+        specParam.setGeneric(false);
+        return specParamMapper.select(specParam);
+    }
 }

@@ -29,6 +29,12 @@ public class CategoryController {
 
         return categoryService.findCategoryById(categoryId);
     }
+    @RequestMapping("findCategoryByCids")
+    @ResponseBody
+    public List<Category>  findCategoryByCids(@RequestBody List<Long> cids){
+
+        return categoryService.findCategoryByCids(cids);
+    }
     @RequestMapping("show")
     @ResponseBody
     public Category show(){

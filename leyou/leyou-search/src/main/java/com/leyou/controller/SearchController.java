@@ -6,6 +6,7 @@ import com.leyou.feign.CategoryClient;
 import com.leyou.feign.SpecClient;
 import com.leyou.pojo.*;
 import com.leyou.repository.GoodsRepository;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.Aggregation;
@@ -39,13 +40,30 @@ public class SearchController {
     SpecClient specClient;
     @RequestMapping("page")
     public  Object findAll(@RequestBody SearchEntity searchEntity){
+        System.out.println(searchEntity.getKey());
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
-        builder.withQuery(QueryBuilders.matchQuery("all", searchEntity.getKey()).operator(Operator.AND));
+        // builder.withQuery(QueryBuilders.matchQuery("all", searchEntity.getKey()).operator(Operator.AND));
+        //过滤filter查询条件
+        BoolQueryBuilder builder1 = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("all", searchEntity.getKey()).operator(Operator.AND));
+        if(searchEntity.getFilter()!=null && searchEntity.getFilter().size()>0){
+            searchEntity.getFilter().keySet().forEach(key->{
+                String filed="specs."+key+".keyword";
+                if(key.equals("分类")){
+                    filed="cid3";
+                }else if(key.equals("品牌")){
+                    filed="brandId";
+                }
+                builder1.filter(QueryBuilders.termQuery(filed,searchEntity.getFilter().get(key)));
+            });
+        }
+        builder.withQuery(builder1);
+        //分页查询
         builder.withPageable(PageRequest.of(searchEntity.getPage()-1,searchEntity.getSize()));
         //根据新品排序
-//        builder.withSort(searchEntity.)
+        //builder.withSort(searchEntity.)
         //Page<Goods> page = goodsRepository.search(builder.build());
-       // System.out.println(page.getTotalPages());
+        // System.out.println(page.getTotalPages());
+
         String categoryName="categoryName";
         String brandName="brandName";
         builder.addAggregation(AggregationBuilders.terms(categoryName).field("cid3"));//聚合分类

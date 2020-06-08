@@ -25,11 +25,7 @@ public class GoodsDetailController {
     CategoryClient categoryClient;
     @Autowired
     BrandClient brandClient;
-    @RequestMapping("show")
-    public String show(Model model){
-        model.addAttribute("name","张三");
-        return "hello";
-    }
+
     @RequestMapping("item/{spuId}.html")
 
     public String showDetail(@PathVariable("spuId")Long spuId, Model model){

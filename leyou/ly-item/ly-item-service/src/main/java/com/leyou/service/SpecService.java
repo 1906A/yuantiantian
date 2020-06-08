@@ -26,7 +26,15 @@ public class SpecService {
     public List<SpecGroup> findByCid(Long cid) {
         SpecGroup specGroup = new SpecGroup();
         specGroup.setCid(cid);
-        return specMapper.select(specGroup);
+        //根据分类ID查询规格参数组及组内参数列表
+        List<SpecGroup> groups = specMapper.select(specGroup);
+        groups.forEach(group->{
+            SpecParam specParam = new SpecParam();
+            specParam.setGroupId(group.getId());
+            group.setParams( specParamMapper.select(specParam));
+
+        });
+        return groups;
     }
 
     public void delGroup(Long id) {
